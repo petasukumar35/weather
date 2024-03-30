@@ -1,12 +1,14 @@
 import React, { useState, useRef } from 'react';
-import "./weather.css";
-
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import './weather.css';
 
 const API_KEY = 'Ei4NRNQOjUR6YNKtx0ob6gEZJnLiuxys';
 
 const Weather1 = () => {
   const [weatherData, setWeatherData] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null); // State for error message
   const locationRef = useRef(null);
   const [data, setData] = useState([]);
 
@@ -23,30 +25,41 @@ const Weather1 = () => {
       setWeatherData(location);
       setData(daily);
       setLoading(false);
+      setError(null); // Clear error if fetch is successful
+      // setError('Error fetching weather data. Please try again.');
     } catch (error) {
       console.error('Error fetching weather data:', error);
       setLoading(false);
+      setError('Error fetching weather data. Please try with correct data again.'); // Set error message
     }
   }
 
+  const handleCloseSnackbar = () => {
+    setError(null); // Clear error message when Snackbar is closed
+  };
+
   return (
-    <>
-    <div style={{ backgroundColor: 'lightblue',  }}>   
-    <div className="Weather">
-      <div>
-        <h1>Current Weather</h1>
-        <input
-          type="text"
-          ref={locationRef}
-          placeholder="Enter location"
-        />
-        <br />
-        <br />
+    <div className="weather-container">
+      <h1 style={{color: "black"}}>Current Weather</h1>
+      <div className="input-container">
+        <input type="text" ref={locationRef} placeholder="Enter location"/>
+        <hr></hr>
         <button onClick={fetchData}>Submit</button>
-        <br></br>
-        <br></br>
-        <div className="container">
-          <table className="table table-bordered table-striped min-height: 400px !important">
+      </div>
+      
+      {/* Snackbar for displaying error message */}
+      <Snackbar open={error !== null} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+        <MuiAlert elevation={6} variant="filled" onClose={handleCloseSnackbar} severity="error">
+          {error}
+        </MuiAlert>
+      </Snackbar>
+      
+      {/* Conditional rendering based on loading state */}
+      {loading ? (
+        <h2 style={{color: "black"}}><i>Loading...</i></h2>
+      ) : (
+        <div className="table-container">
+          <table>
             <thead>
               <tr>
                 <th>Latitude</th>
@@ -62,41 +75,31 @@ const Weather1 = () => {
               </tr>
             </tbody>
           </table>
-
-          <br />
-          <br />
-          
-          <div class="temprature-class">
-            <h2>Temperature</h2>
-            <table className="table table-striped">
-              <thead>
-                <tr>
-                  <th>Time</th>
-                  <th>Average Temperature (°C)</th>
-                  <th>Max Temperature (°C)</th>
-                  <th>Min Temperature (°C)</th>
+          <hr></hr>
+          <h2 style={{color: "black"}}>Temperature</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Average Temperature (°C)</th>
+                <th>Max Temperature (°C)</th>
+                <th>Min Temperature (°C)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((entry, index) => (
+                <tr key={index}>
+                  <td>{entry.time}</td>
+                  <td>{entry.values.temperatureAvg}</td>
+                  <td>{entry.values.temperatureMax}</td>
+                  <td>{entry.values.temperatureMin}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {data.map((entry, index) => (
-                  <tr key={index}>
-                    <td>{entry.time}</td>
-                    <td>{entry.values.temperatureAvg}</td>
-                    <td>{entry.values.temperatureMax}</td>
-                    <td>{entry.values.temperatureMin}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <br></br>
-            <br></br>
-            <br></br>
-          </div>
+              ))}
+            </tbody>
+          </table>
         </div>
-      </div>
+      )}
     </div>
-    </div>
-    </>
   );
 };
 

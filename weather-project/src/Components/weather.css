@@ -1,3 +1,65 @@
-.temprature-class {
-    min-height: 400px !important;
-}
+/* weather.css */
+
+/* Style for the entire page */
+body {
+    background-color: #a9c3df; /* Blue background color */
+    color: #fff; /* White text color */
+  }
+  
+  /* Style for the weather container */
+  .weather-container {
+    padding: 20px;
+  }
+  
+  /* Style for the input field and button */
+  .input-container {
+    margin-bottom: 20px;
+    padding-top: 30px;
+    display: grid;
+  }
+  
+  .input-container input[type="text"] {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    color: black;
+  }
+  
+  .input-container button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: #0056b3;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .input-container button:hover {
+    background-color: #004080;
+  }
+  
+  /* Style for the tables */
+  .table-container {
+    margin-top: 20px;
+  }
+  
+  .table-container table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table-container th, .table-container td {
+    padding: 10px;
+    border: 1px solid #651f1f;
+  }
+  
+  .table-container th {
+    background-color: #de22e1; /* Purple color */
+    color: #fff; /* White text color */
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .table-container td {
+    color: black;
+  }
